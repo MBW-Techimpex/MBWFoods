@@ -1,0 +1,21 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // If it's an admin route, don't scroll to top automatically
+    if (pathname.startsWith('/admin')) {
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
+export default ScrollToTop;
+
+
+
