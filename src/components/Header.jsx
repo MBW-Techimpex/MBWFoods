@@ -337,7 +337,7 @@ export default function Header({ isScrolled, activePage }) {
                 to="/subscribe"
                 className="hidden md:flex items-center justify-center bg-brand-primary text-white px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-accent hover:shadow-lg hover:shadow-brand-primary/20 transition-all active:scale-95 mx-2"
               >
-                Subscribe
+                Subscription
               </Link> */}
               <div className="flex gap-4 items-center border-l-2 border-slate-100 pl-4 md:pl-8">
                 <button onClick={() => openSidebar('wishlist')} className="p-2 hover:bg-violet-50 rounded-full transition-colors relative group">
@@ -541,7 +541,7 @@ export default function Header({ isScrolled, activePage }) {
               to="/subscribe"
               className="hidden md:flex items-center justify-center bg-brand-primary text-white px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-accent hover:shadow-lg hover:shadow-brand-primary/20 transition-all active:scale-95 mx-2"
             >
-              Subscribe
+              Subscription
             </Link>
 
           </div>

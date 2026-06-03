@@ -66,12 +66,12 @@ export default function SubscriptionPlansManagement() {
     const [settings, setSettings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    
+
     // Header states
     const [heading, setHeading] = useState('Weekly Meal Subscriptions');
     const [subtitle, setSubtitle] = useState('Exquisite Culinary Protocols');
     const [description, setDescription] = useState('Savor premium, fresh South Indian recipes designed and prepared daily by our expert chefs. Enjoy morning, mid-day, or evening deliveries straight to your doorstep. No cooking, no mess—just absolute culinary perfection.');
-    
+
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activePlan, setActivePlan] = useState(null); // 'Breakfast', 'Lunch', 'Dinner'
@@ -100,7 +100,7 @@ export default function SubscriptionPlansManagement() {
             if (res.ok) {
                 const data = await res.json();
                 setSettings(data || []);
-                
+
                 // Extract general settings
                 const getSetting = (key, fallback) => {
                     const s = data.find(x => x.key === key);
@@ -110,7 +110,7 @@ export default function SubscriptionPlansManagement() {
                 setHeading(getSetting('subscription_heading', 'Weekly Meal Subscriptions'));
                 setSubtitle(getSetting('subscription_subtitle', 'Exquisite Culinary Protocols'));
                 setDescription(getSetting('subscription_description', 'Savor premium, fresh South Indian recipes designed and prepared daily by our expert chefs. Enjoy morning, mid-day, or evening deliveries straight to your doorstep. No cooking, no mess—just absolute culinary perfection.'));
-                
+
             }
         } catch (err) {
             console.error("Failed to load settings:", err);
@@ -131,11 +131,11 @@ export default function SubscriptionPlansManagement() {
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].forEach(day => {
             menu[day] = getPlanValue(plan, 'menu', `sub_menu_${lowerPlan}_${day.toLowerCase()}`, defaultMenus[plan][day]);
         });
-        
+
         setPlanData({
             name: getPlanValue(plan, 'name', `subscription_${lowerPlan}_name`, `${plan} Plan`),
             fullName: getPlanValue(plan, 'fullName', `subscription_${lowerPlan}_fullname`, `Weekly ${plan} Subscription Plan`),
-            buttonText: getPlanValue(plan, 'buttonText', `subscription_${lowerPlan}_button_text`, `Subscribe to ${plan} Plan`),
+            buttonText: getPlanValue(plan, 'buttonText', `subscription_${lowerPlan}_button_text`, `Subscription to ${plan} Plan`),
             footerNote: getPlanValue(plan, 'footerNote', `subscription_${lowerPlan}_footer_note`, 'Secure checkout & auto-activation for next morning'),
             price: getPlanValue(plan, 'price', `subscription_${lowerPlan}_price`, defaultPrices[plan]),
             discount: getPlanValue(plan, 'discount', `subscription_${lowerPlan}_discount`, '0'),
@@ -189,7 +189,7 @@ export default function SubscriptionPlansManagement() {
     const handleSavePlan = async () => {
         setSaving(true);
         const lowerPlan = activePlan.toLowerCase();
-        
+
         const newSettings = [
             { key: `subscription_${lowerPlan}_name`, value: planData.name, group: 'business' },
             { key: `subscription_${lowerPlan}_fullname`, value: planData.fullName, group: 'business' },
@@ -263,12 +263,12 @@ export default function SubscriptionPlansManagement() {
                         <IconSection size={24} className="text-brand-primary" />
                         Page Header Information
                     </h2>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-slate-500 uppercase">Subtitle / Tagline</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 value={subtitle}
                                 onChange={(e) => setSubtitle(e.target.value)}
                                 className="w-full px-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
@@ -276,8 +276,8 @@ export default function SubscriptionPlansManagement() {
                         </div>
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-slate-500 uppercase">Main Heading</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 value={heading}
                                 onChange={(e) => setHeading(e.target.value)}
                                 className="w-full px-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
@@ -285,7 +285,7 @@ export default function SubscriptionPlansManagement() {
                         </div>
                         <div className="space-y-2 md:col-span-2">
                             <label className="text-xs font-bold text-slate-500 uppercase">Description</label>
-                            <textarea 
+                            <textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 rows={3}
@@ -293,9 +293,9 @@ export default function SubscriptionPlansManagement() {
                             />
                         </div>
                     </div>
-                    
+
                     <div className="flex justify-end pt-4">
-                        <button 
+                        <button
                             onClick={handleSaveGeneral}
                             disabled={saving}
                             className="flex items-center gap-2 bg-brand-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-primary/90 transition-colors"
@@ -317,7 +317,7 @@ export default function SubscriptionPlansManagement() {
                             <p className="text-sm text-slate-500 mb-6 flex-1">
                                 Click to edit the plan details, pricing, timings, and 7-day menu items.
                             </p>
-                            <button 
+                            <button
                                 onClick={() => openEditModal(plan.name)}
                                 className={`w-full py-3 rounded-xl font-bold border-2 transition-colors flex justify-center items-center gap-2 ${plan.color} border-current hover:${plan.bg}`}
                             >
@@ -332,15 +332,15 @@ export default function SubscriptionPlansManagement() {
                 <AnimatePresence>
                     {isModalOpen && (
                         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
                                 onClick={closeEditModal}
                             />
-                            
-                            <motion.div 
+
+                            <motion.div
                                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -351,7 +351,7 @@ export default function SubscriptionPlansManagement() {
                                         <h2 className="text-2xl font-bold text-slate-800">Edit {activePlan} Plan</h2>
                                         <p className="text-sm text-slate-500">Update the plan details that reflect dynamically on the Subscribe page.</p>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={closeEditModal}
                                         className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-red-50 hover:text-red-500 transition-colors"
                                     >
@@ -368,37 +368,37 @@ export default function SubscriptionPlansManagement() {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold text-slate-500">Short Name</label>
-                                                <input 
+                                                <input
                                                     type="text"
                                                     value={planData.name}
-                                                    onChange={(e) => setPlanData({...planData, name: e.target.value})}
+                                                    onChange={(e) => setPlanData({ ...planData, name: e.target.value })}
                                                     className="w-full px-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold text-slate-500">Full Name</label>
-                                                <input 
+                                                <input
                                                     type="text"
                                                     value={planData.fullName}
-                                                    onChange={(e) => setPlanData({...planData, fullName: e.target.value})}
+                                                    onChange={(e) => setPlanData({ ...planData, fullName: e.target.value })}
                                                     className="w-full px-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold text-slate-500">Button Text</label>
-                                                <input 
+                                                <input
                                                     type="text"
                                                     value={planData.buttonText}
-                                                    onChange={(e) => setPlanData({...planData, buttonText: e.target.value})}
+                                                    onChange={(e) => setPlanData({ ...planData, buttonText: e.target.value })}
                                                     className="w-full px-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-xs font-bold text-slate-500">Footer Note</label>
-                                                <input 
+                                                <input
                                                     type="text"
                                                     value={planData.footerNote}
-                                                    onChange={(e) => setPlanData({...planData, footerNote: e.target.value})}
+                                                    onChange={(e) => setPlanData({ ...planData, footerNote: e.target.value })}
                                                     className="w-full px-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
                                                 />
                                             </div>
@@ -409,10 +409,10 @@ export default function SubscriptionPlansManagement() {
                                                 <label className="text-xs font-bold text-slate-500">Weekly Price (₹)</label>
                                                 <div className="relative">
                                                     <IconCurrencyDollar size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                                                    <input 
+                                                    <input
                                                         type="number"
                                                         value={planData.price}
-                                                        onChange={(e) => setPlanData({...planData, price: e.target.value})}
+                                                        onChange={(e) => setPlanData({ ...planData, price: e.target.value })}
                                                         className="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
                                                     />
                                                 </div>
@@ -421,10 +421,10 @@ export default function SubscriptionPlansManagement() {
                                                 <label className="text-xs font-bold text-slate-500">Discount (%)</label>
                                                 <div className="relative">
                                                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">%</span>
-                                                    <input 
+                                                    <input
                                                         type="number"
                                                         value={planData.discount}
-                                                        onChange={(e) => setPlanData({...planData, discount: e.target.value})}
+                                                        onChange={(e) => setPlanData({ ...planData, discount: e.target.value })}
                                                         className="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
                                                     />
                                                 </div>
@@ -433,7 +433,7 @@ export default function SubscriptionPlansManagement() {
                                                 <label className="text-xs font-bold text-slate-500">Offer Rate (₹)</label>
                                                 <div className="relative">
                                                     <IconCurrencyDollar size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                                                    <input 
+                                                    <input
                                                         type="text"
                                                         readOnly
                                                         value={planData.price ? (parseFloat(planData.price) - (parseFloat(planData.price) * (parseFloat(planData.discount || 0) / 100))).toFixed(2) : '0.00'}
@@ -445,19 +445,19 @@ export default function SubscriptionPlansManagement() {
                                                 <label className="text-xs font-bold text-slate-500">Delivery Timings</label>
                                                 <div className="relative">
                                                     <IconClock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                                                    <input 
+                                                    <input
                                                         type="text"
                                                         value={planData.timing}
-                                                        onChange={(e) => setPlanData({...planData, timing: e.target.value})}
+                                                        onChange={(e) => setPlanData({ ...planData, timing: e.target.value })}
                                                         className="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="space-y-2 md:col-span-3">
                                                 <label className="text-xs font-bold text-slate-500">Plan Description</label>
-                                                <textarea 
+                                                <textarea
                                                     value={planData.description}
-                                                    onChange={(e) => setPlanData({...planData, description: e.target.value})}
+                                                    onChange={(e) => setPlanData({ ...planData, description: e.target.value })}
                                                     rows={2}
                                                     className="w-full px-4 py-3 bg-slate-50 rounded-xl border border-transparent focus:border-brand-primary/30 outline-none resize-none"
                                                 />
@@ -474,11 +474,11 @@ export default function SubscriptionPlansManagement() {
                                             {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
                                                 <div key={day} className="space-y-1">
                                                     <label className="text-[10px] font-black text-brand-primary uppercase tracking-wider">{day}</label>
-                                                    <input 
+                                                    <input
                                                         type="text"
                                                         value={planData.menu[day]}
                                                         onChange={(e) => setPlanData({
-                                                            ...planData, 
+                                                            ...planData,
                                                             menu: { ...planData.menu, [day]: e.target.value }
                                                         })}
                                                         placeholder={`${day} Menu`}
@@ -491,7 +491,7 @@ export default function SubscriptionPlansManagement() {
                                 </div>
 
                                 <div className="p-6 border-t bg-slate-50 flex justify-end sticky bottom-0">
-                                    <button 
+                                    <button
                                         onClick={handleSavePlan}
                                         disabled={saving}
                                         className="flex items-center gap-2 bg-brand-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-primary/90 transition-colors shadow-lg shadow-brand-primary/20"

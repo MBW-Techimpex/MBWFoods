@@ -55,15 +55,15 @@ export default function Subscribe() {
     Sunday: settings.sub_menu_dinner_sunday || 'Steaming Hot Idli (3 Pcs) with Spicy Chutney'
   };
 
-    const getPlanPricing = (planName, defaultPrice) => {
+  const getPlanPricing = (planName, defaultPrice) => {
     const price = parseFloat(settings[`subscription_${planName}_price`] || defaultPrice);
     const discount = parseFloat(settings[`subscription_${planName}_discount`] || 0);
     const offerPrice = price - (price * (discount / 100));
     const name = settings[`subscription_${planName}_name`] || `${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan`;
     const fullName = settings[`subscription_${planName}_fullname`] || `Weekly ${planName.charAt(0).toUpperCase() + planName.slice(1)} Subscription Plan`;
-    const buttonText = settings[`subscription_${planName}_button_text`] || `Subscribe to ${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan`;
+    const buttonText = settings[`subscription_${planName}_button_text`] || `Subscription to ${planName.charAt(0).toUpperCase() + planName.slice(1)} Plan`;
     const footerNote = settings[`subscription_${planName}_footer_note`] || 'Secure checkout & auto-activation for next morning';
-    
+
     return {
       price,
       offerPrice,
@@ -214,8 +214,8 @@ export default function Subscribe() {
                     whileHover={{ y: isActive ? 0 : -6 }}
                     onClick={() => setActivePlan(plan.name)}
                     className={`bg-white dark:bg-slate-900 border-2 rounded-[2rem] p-6 transition-all duration-300 cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[220px] shadow-sm ${isActive
-                        ? `border-brand-primary shadow-2xl ring-4 ring-brand-primary/5 ${plan.glow}`
-                        : 'border-slate-100 dark:border-slate-800 hover:border-brand-primary/20 hover:shadow-xl'
+                      ? `border-brand-primary shadow-2xl ring-4 ring-brand-primary/5 ${plan.glow}`
+                      : 'border-slate-100 dark:border-slate-800 hover:border-brand-primary/20 hover:shadow-xl'
                       }`}
                   >
                     {/* Subtle Background Accent */}

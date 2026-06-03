@@ -981,6 +981,67 @@ function BannerSection({ banners }) {
   );
 }
 
+const getYoutubeId = (url) => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
+const VideoCard = ({ video }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const videoId = getYoutubeId(video.youtubeLink);
+
+  return (
+    <a
+      href={video.youtubeLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block shrink-0 w-[280px] h-[280px] rounded-[1.5rem] overflow-hidden relative shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {isHovered && videoId ? (
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&playsinline=1`}
+          className="absolute inset-0 w-full h-full object-cover scale-[1.0] pointer-events-none"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
+      ) : (
+        <>
+          <img
+            src={video.thumbnail ? getImageUrl(video.thumbnail) : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '/uploads/placeholder.jpg')}
+            alt={video.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <div className="w-12 h-12 rounded-[14px] bg-[#FF0000] flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform duration-300">
+              <svg className="w-6 h-6 ml-0.5 drop-shadow-md" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+            </div>
+          </div>
+        </>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
+
+      {/* Content overlaid on video card */}
+      <div className="absolute inset-0 p-6 flex flex-col justify-end pointer-events-none">
+        <h3 className="text-white text-2xl font-black uppercase drop-shadow-md mb-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300 line-clamp-2">
+          {video.title}
+        </h3>
+        <div className="flex justify-end translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-75">
+          <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-blue-900 rounded-full text-xs font-bold shadow-lg">
+            Watch Video
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+};
+
 function VideoJourneySection() {
   const [videos, setVideos] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
@@ -1055,10 +1116,10 @@ function VideoJourneySection() {
 
   // If we have <=3 videos, show them static. If >3, loop.
   const loopVideos = videos.length > 3 ? [...videos, ...videos, ...videos] : videos;
-  
+
   // Calculate offset. 
-  // We want to show 3 cards at a time.
-  const cardWidth = 380 + 32; // width + gap (approximate)
+  // We want to show 3 or 4 cards at a time.
+  const cardWidth = 280 + 32; // width + gap (approximate)
 
   return (
     <section className="py-24 bg-slate-50/50 dark:bg-slate-900/50 relative overflow-hidden group/vj"
@@ -1093,23 +1154,7 @@ function VideoJourneySection() {
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
               {loopVideos.map((video, i) => (
-                <div key={`${video.id}-${i}`} className="shrink-0 w-[380px] h-[380px] rounded-[1.5rem] overflow-hidden relative shadow-lg hover:shadow-2xl transition-all duration-300 group">
-                  <img src={video.thumbnail || '/uploads/placeholder.jpg'} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                  
-                  {/* Content overlaid on video card */}
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                    <h3 className="text-white text-3xl font-black uppercase drop-shadow-md mb-2 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                      {video.title}
-                    </h3>
-                    <div className="flex justify-end translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-75">
-                      <a href={video.youtubeLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-blue-900 rounded-full text-xs font-bold shadow-lg hover:bg-blue-50 transition-colors">
-                        Watch Video
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                <VideoCard key={`${video.id}-${i}`} video={video} />
               ))}
             </motion.div>
           </div>

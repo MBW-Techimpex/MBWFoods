@@ -14,7 +14,7 @@ import EXTERIOR_ACCESSORIES_IMAGES from '../assets/Exterior Accessories/exterior
 // Helper: get the best image src for a product
 function getProductImage(product, index = 0) {
   const placeholders = [
-    'placeholder', 'chrome_kit.png', 'door_visors.png', 'exhaust_tips.png', 
+    'placeholder', 'chrome_kit.png', 'door_visors.png', 'exhaust_tips.png',
     'hybrid_grill.png', 'car_cover.png', 'exterior_cat.png', 'door_guards_hq.png',
     'interior_cat.png', 'utilities_cat.png', 'lighting_cat.png'
   ];
@@ -22,7 +22,7 @@ function getProductImage(product, index = 0) {
   // If it's a real uploaded image (usually has a timestamp prefix and not a placeholder), use it
   const imgStr = String(product.image || "");
   const isPlaceholder = !product.image || placeholders.some(p => imgStr.toLowerCase().includes(p.toLowerCase()));
-  
+
   if (!isPlaceholder && product.image.startsWith('/uploads/')) {
     return getImageUrl(product.image);
   }
@@ -45,7 +45,7 @@ function CategorySidebar({ sidebarCollections, slug }) {
   // Determine which items are "main" and which are "extra"
   // If the current category is NOT in the first 6, we should ideally show it in the main list
   // but for simplicity, let's just make sure it's visible.
-  
+
   const mainItems = sidebarCollections.slice(0, VISIBLE);
   const extraItems = sidebarCollections.slice(VISIBLE);
 
@@ -65,16 +65,14 @@ function CategorySidebar({ sidebarCollections, slug }) {
               <li key={item.label}>
                 <Link
                   to={item.link}
-                  className={`text-sm flex items-center justify-between py-1.5 px-2 rounded-lg transition-all ${
-                    isCurrent
+                  className={`text-sm flex items-center justify-between py-1.5 px-2 rounded-lg transition-all ${isCurrent
                       ? 'text-brand-primary font-bold bg-brand-primary/5 dark:bg-brand-primary/10'
                       : 'text-slate-500 dark:text-slate-400 hover:text-brand-primary hover:bg-slate-50 dark:hover:bg-slate-900'
-                  }`}
+                    }`}
                 >
                   <span>{item.label}</span>
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                    isCurrent ? 'bg-brand-primary/10 text-brand-primary' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'
-                  }`}>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${isCurrent ? 'bg-brand-primary/10 text-brand-primary' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'
+                    }`}>
                     {item.count}
                   </span>
                 </Link>
@@ -93,16 +91,14 @@ function CategorySidebar({ sidebarCollections, slug }) {
                   <li key={item.label}>
                     <Link
                       to={item.link}
-                      className={`text-sm flex items-center justify-between py-1.5 px-2 rounded-lg transition-all ${
-                        isCurrent
+                      className={`text-sm flex items-center justify-between py-1.5 px-2 rounded-lg transition-all ${isCurrent
                           ? 'text-brand-primary font-bold bg-brand-primary/5 dark:bg-brand-primary/10'
                           : 'text-slate-500 dark:text-slate-400 hover:text-brand-primary hover:bg-slate-50 dark:hover:bg-slate-900'
-                      }`}
+                        }`}
                     >
                       <span>{item.label}</span>
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
-                        isCurrent ? 'bg-brand-primary/10 text-brand-primary' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'
-                      }`}>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${isCurrent ? 'bg-brand-primary/10 text-brand-primary' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'
+                        }`}>
                         {item.count}
                       </span>
                     </Link>
@@ -174,28 +170,29 @@ export default function CollectionPage({ slug: propSlug }) {
       setAllProducts(safeData);
 
       // Filter products for the current collection
+      let collectionProducts = [];
       if (pageConfig) {
-        const filtered = allData.filter(p => {
+        collectionProducts = allData.filter(p => {
           const fieldValue = p[pageConfig.filter_field];
           const filterValue = pageConfig.filter_value;
           if (!fieldValue || !filterValue) return false;
-          
+
           const cleanString = (str) => String(str || "").toLowerCase().replace(/[^a-z0-9]/g, '');
           const cleanField = cleanString(fieldValue);
           const cleanFilter = cleanString(filterValue);
           if (!cleanField || !cleanFilter) return false;
-          
+
           const matchesFilter = cleanField.includes(cleanFilter) || cleanFilter.includes(cleanField);
           return matchesFilter && (p.status === 'Active' || p.status === 'ACTIVE');
         });
-        setProducts(filtered);
       } else {
         // Fallback to active products if no specific collection config
-        setProducts(allData.filter(p => p.status === 'Active' || p.status === 'ACTIVE'));
+        collectionProducts = allData.filter(p => p.status === 'Active' || p.status === 'ACTIVE');
       }
+      setProducts(collectionProducts);
 
       // Initial price range
-      const prices = allData.map(p => {
+      const prices = collectionProducts.map(p => {
         const val = typeof p.price === 'string' ? parseFloat(p.price.replace(/[^\d.]/g, '')) : p.price;
         return val || 0;
       });
@@ -235,12 +232,12 @@ export default function CollectionPage({ slug: propSlug }) {
         const fieldValue = p[cat.filter_field];
         const filterValue = cat.filter_value;
         if (!fieldValue || !filterValue) return false;
-        
+
         const cleanString = (str) => String(str || "").toLowerCase().replace(/[^a-z0-9]/g, '');
         const cleanField = cleanString(fieldValue);
         const cleanFilter = cleanString(filterValue);
         if (!cleanField || !cleanFilter) return false;
-        
+
         const matchesFilter = cleanField.includes(cleanFilter) || cleanFilter.includes(cleanField);
         return matchesFilter && (p.status === 'Active' || p.status === 'ACTIVE');
       }).length,
@@ -283,7 +280,7 @@ export default function CollectionPage({ slug: propSlug }) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-950 flex flex-col items-center justify-center space-y-4 px-6 text-center">
         <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-4">
-           <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
@@ -301,7 +298,7 @@ export default function CollectionPage({ slug: propSlug }) {
   }
 
   return (
-   <div className="min-h-screen bg-[#fcfcfc] dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200 overflow-x-hidden transition-colors">
+    <div className="min-h-screen bg-[#fcfcfc] dark:bg-slate-950 font-sans text-slate-800 dark:text-slate-200 overflow-x-hidden transition-colors">
       <Header isScrolled={isScrolled} activePage={slug} />
 
       {/* ── Page Header ── */}
@@ -358,7 +355,7 @@ export default function CollectionPage({ slug: propSlug }) {
                 className="w-full accent-brand-primary"
               />
               <div className="flex justify-between items-center mt-4 text-sm font-bold text-slate-600 dark:text-slate-400">
-                <span>Price: <span className="text-brand-primary">{formatPrice(0)} - {formatPrice(priceRange)}</span></span>
+                <span>Price: <span className="text-brand-primary">{formatPrice(0)}  {formatPrice(priceRange)}</span></span>
                 <button className="text-[10px] uppercase tracking-widest bg-slate-100 dark:bg-slate-800 hover:bg-brand-primary hover:text-white px-3 py-1 rounded-full transition-colors text-slate-500 dark:text-slate-400 dark:text-slate-400">
                   Filter
                 </button>
